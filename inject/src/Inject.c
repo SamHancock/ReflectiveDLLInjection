@@ -91,7 +91,8 @@ int main( int argc, char * argv[] )
 			priv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 		
 			if( LookupPrivilegeValue( NULL, SE_DEBUG_NAME, &priv.Privileges[0].Luid ) )
-				AdjustTokenPrivileges( hToken, FALSE, &priv, 0, NULL, NULL );
+				if (!AdjustTokenPrivileges( hToken, FALSE, &priv, 0, NULL, NULL ))
+					BREAK_WITH_ERROR( "Failed to enable SeDebugPrivileges!" );
 
 			CloseHandle( hToken );
 		}
